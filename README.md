@@ -61,23 +61,9 @@ the official site, so integrators always get the latest tested build.
 
 ## How a payment works
 
-```mermaid
-sequenceDiagram
-    autonumber
-    participant S as Your Server
-    participant M as MK Pay
-    participant C as Customer
-    participant N as BSC / Binance Pay
-
-    S->>M: POST /api/v1/create.php (HMAC-SHA512 signed)
-    M-->>S: 200 OK — transaction_id, note, redirect URL
-    S->>C: Redirect the customer to the checkout URL
-    C->>N: Pays the exact amount shown (USDT)
-    N->>M: Payment detected automatically (24/7 watcher)
-    M->>M: Invoice becomes PAID (credited = arrived amount)
-    M->>S: POST webhook — X-GW-Signature (HMAC-SHA512 of body)
-    S->>S: Verify signature, credit customer, answer 200 OK
-```
+<p align="center">
+  <img src="payment-flow.png" alt="MK Pay payment flow — create, redirect, detect, confirm, webhook" width="820">
+</p>
 
 In five words: **create, redirect, detect, confirm, webhook.** Your server only does two
 things — call the Create Invoice endpoint and handle the webhook. Everything else
