@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MK Pay — Merchant API Documentation</title>
+<style>
+*{box-sizing:border-box;margin:0}
+:root{--g1:#2F6FFF;--g2:#8B5CF6;--grad:linear-gradient(135deg,#2F6FFF,#8B5CF6);--bg:#090D1C;--panel:#0F1530;--line:rgba(255,255,255,.09);--ink:#E8ECFA;--mut:#98A1C4;--ok:#0ECB81;--warn:#F0B429;--bad:#FF6B6B;--code:#0A0F20}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:15px}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(700px 380px at 85% -5%,rgba(47,111,255,.13),transparent 60%),radial-gradient(600px 400px at -8% 105%,rgba(139,92,246,.10),transparent 60%)}
+a{color:#8FA7FF;text-decoration:none}
+a:hover{text-decoration:underline}
+::selection{background:rgba(47,111,255,.35)}
+/* ── Sidebar ── */
+.sb{position:fixed;inset-block:0;left:0;width:252px;padding:22px 16px;background:linear-gradient(170deg,#0A0F22,#0C1234 55%,#111741);border-right:1px solid var(--line);overflow-y:auto;z-index:40}
+.logo{color:#fff;font-weight:900;font-size:21px;letter-spacing:.3px}
+.logo b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo a{color:inherit;text-decoration:none;cursor:pointer}
+.logo img{height:44px;width:auto;display:block}
+.ver{font-size:11px;color:var(--mut);margin:2px 0 18px}
+.sb nav a{display:block;color:#A6AECB;padding:8px 12px;border-radius:9px;font-size:13.5px;font-weight:600;margin-bottom:2px;border-left:2px solid transparent}
+.sb nav a:hover{background:rgba(255,255,255,.05);color:#fff;text-decoration:none}
+.sb nav a.on{color:#fff;background:linear-gradient(90deg,rgba(47,111,255,.18),rgba(139,92,246,.12));border-left-color:var(--g1)}
+.sb .foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font-size:11.5px;color:#7A83A8;line-height:1.7}
+/* ── Main ── */
+main{margin-left:252px;padding:38px clamp(18px,4vw,48px) 40px;max-width:1010px}
+section{margin-bottom:56px;scroll-margin-top:24px}
+h1{font-size:34px;font-weight:900;letter-spacing:.2px;line-height:1.25}
+h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);margin:12px 0 18px;font-size:15.5px;max-width:660px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{font-size:11px;font-weight:800;letter-spacing:.06em;padding:5px 12px;border-radius:999px;border:1px solid var(--line);color:#B9C2E4;background:rgba(255,255,255,.03)}
+.chip.g{color:#35E0A1;border-color:rgba(14,203,129,.35);background:rgba(14,203,129,.08)}
+h2{font-size:22px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+h2::after{content:"";flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--g1),var(--g2),transparent);opacity:.35;min-width:30px}
+h3{font-size:15.5px;font-weight:800;margin:26px 0 10px;color:#C9D3F5}
+p{margin-bottom:12px;color:#CBD2EA}
+ul,ol{margin:0 0 14px 22px;color:#CBD2EA}
+li{margin-bottom:7px}
+b{color:#fff}
+/* ── Tables ── */
+.tblwrap{overflow-x:auto;margin:14px 0 20px}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tbl th{background:rgba(47,111,255,.10);color:#AEB9DF;text-align:left;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;padding:10px 14px;border-bottom:1px solid var(--line);font-weight:800}
+.tbl td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;color:#C6CEE9}
+.tbl tr:last-child td{border-bottom:0}
+.tbl tr:hover td{background:rgba(255,255,255,.03)}
+code{font-family:ui-monospace,'Cascadia Code',Consolas,'Courier New',monospace;background:rgba(47,111,255,.13);color:#9DB9FF;padding:2px 7px;border-radius:6px;font-size:12.5px;word-break:break-word}
+/* ── Code blocks ── */
+.codewrap{margin:14px 0 20px;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--code)}
+.codehead{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:#0D1330;border-bottom:1px solid var(--line);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8A94BC;font-weight:800}
+.copy{cursor:pointer;background:rgba(255,255,255,.05);border:1px solid var(--line);color:#C4CDEE;border-radius:7px;padding:4px 12px;font-size:11px;font-weight:700;font-family:inherit}
+.copy:hover{background:rgba(255,255,255,.10);color:#fff}
+pre{padding:16px 18px;overflow-x:auto;font-family:ui-monospace,Consolas,'Courier New',monospace;font-size:13px;line-height:1.7;color:#D7DEF6}
+pre .c{color:#6FA98C;font-style:italic}
+/* ── Callouts ── */
+.box{border:1px solid var(--line);border-left:3px solid var(--g1);background:rgba(47,111,255,.07);border-radius:12px;padding:13px 16px;margin:14px 0 20px;font-size:13.5px;color:#C9D1EC}
+.box b{display:block;margin-bottom:5px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
+.box.note b{color:#8FA7FF}
+.box.ok{border-left-color:var(--ok);background:rgba(14,203,129,.07)}.box.ok b{color:#35E0A1}
+.box.warn{border-left-color:var(--warn);background:rgba(240,180,41,.07)}.box.warn b{color:#F5C044}
+.box.bad{border-left-color:var(--bad);background:rgba(255,107,107,.07)}.box.bad b{color:#FF8A8A}
+/* ── Flow steps ── */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:18px 0 10px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px;font-size:12.5px;color:#B9C2E2}
+.step .n{width:26px;height:26px;border-radius:8px;background:var(--grad);color:#fff;font-weight:900;display:grid;place-items:center;font-size:12px;margin-bottom:9px}
+.step b{display:block;color:#fff;font-size:12.5px;margin-bottom:4px}
+@media(max-width:1000px){.flow{grid-template-columns:1fr 1fr}}
+/* ── Endpoint banner ── */
+.ep{display:block;font-size:15px;padding:14px 18px;border:1px dashed rgba(47,111,255,.5);border-radius:12px;background:rgba(47,111,255,.07);margin:14px 0 8px;color:#A9C0FF;word-break:break-all}
+/* ── FAQ ── */
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 17px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:700;color:#DDE3F8;font-size:14px}
+details[open] summary{margin-bottom:8px}
+details p{margin:0;color:#BCC4E0;font-size:13.5px}
+footer{margin-left:252px;padding:22px clamp(18px,4vw,48px);border-top:1px solid var(--line);color:#7A83A8;font-size:12.5px}
+@media(max-width:900px){
+ .sb{position:static;width:auto;border-right:0;border-bottom:1px solid var(--line)}
+ .sb nav{display:flex;flex-wrap:wrap;gap:6px}
+ .sb nav a{border-left:0;border:1px solid var(--line)}
+ .sb .foot{display:none}
+ main,footer{margin-left:0}
+ h1{font-size:26px}
+}
+</style>
+</head>
+<body>
+
+<aside class="sb">
+  <div class="logo"><a href="/"><img src="logo.png" alt="MK Pay"></a></div>
+  <div class="ver">Merchant API · v1.0</div>
+  <nav>
+    <a href="#overview">01 · Overview</a>
+    <a href="#getting-started">02 · Getting Started</a>
+    <a href="#authentication">03 · Authentication</a>
+    <a href="#create-invoice">04 · Create Invoice</a>
+    <a href="#errors">05 · Errors</a>
+    <a href="#webhooks">06 · Webhooks</a>
+    <a href="#security">07 · Security</a>
+    <a href="#examples">08 · Full Examples</a>
+    <a href="#faq">09 · FAQ</a>
+  </nav>
+  <div class="foot">All endpoints are server-to-server over HTTPS.<br>Amounts are in <b style="color:#C9D3F5">USDT</b>.</div>
+</aside>
+
+<main>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<header id="overview">
+  <div class="chips">
+    <span class="chip g">USDT · BEP20 (BSC) + Binance Pay</span>
+    <span class="chip">HMAC-SHA512 signed</span>
+    <span class="chip">API v1</span>
+    <span class="chip">Updated 23 Oct 2026</span>
+  </div>
+  <h1>MK Pay <span>Merchant API</span></h1>
+  <p class="sub">Integrate USDT payments into your website in minutes. Create invoices from your server, let your customers pay on the MK Pay checkout page, and receive a signed webhook the moment the payment is confirmed.</p>
+</header>
+
+<section id="overview-body">
+  <h2>How it works</h2>
+  <p>The API is intentionally tiny: <b>one endpoint to create an invoice</b> and <b>one webhook to receive confirmations</b>. No SDKs, no complex handshakes — plain HTTPS, JSON and HMAC signatures.</p>
+  <div class="flow">
+    <div class="step"><div class="n">1</div><b>Create invoice</b>Your server calls the Create Invoice endpoint, signed with your API secret.</div>
+    <div class="step"><div class="n">2</div><b>Checkout</b>The customer is redirected to the MK Pay checkout page and pays the exact amount shown (BEP20 transfer, or Binance Pay with the 6-digit note).</div>
+    <div class="step"><div class="n">3</div><b>Detection</b>MK Pay watches the BSC chain and Binance Pay 24/7 — payments are detected automatically, no manual confirmation.</div>
+    <div class="step"><div class="n">4</div><b>Confirmation</b>The invoice becomes <code>PAID</code>. The credited amount is what actually arrived after network fees.</div>
+    <div class="step"><div class="n">5</div><b>Webhook</b>MK Pay sends a signed JSON webhook to your notify URL — you credit the customer.</div>
+  </div>
+
+  <h3>Key facts</h3>
+  <div class="tblwrap"><table class="tbl">
+    <tr><th>Item</th><th>Value</th></tr>
+    <tr><td>Currency</td><td>USDT only (BEP20 / BSC and Binance Pay C2C)</td></tr>
+    <tr><td>Confirmation time</td><td>Usually within a few minutes of the customer paying</td></tr>
+    <tr><td>Request authentication</td><td>HMAC-SHA512 headers (<a href="#authentication">section 03</a>)</td></tr>
+    <tr><td>Webhook authentication</td><td><code>X-GW-Signature</code> — HMAC-SHA512 of the raw body (<a href="#webhooks">section 06</a>)</td></tr>
+    <tr><td>Rate limit</td><td>60 requests per minute per merchant</td></tr>
+  </table></div>
+</section>
+
+<!-- ═══════════════ GETTING STARTED ═══════════════ -->
+<section id="getting-started">
+  <h2>02 · Getting Started</h2>
+  <ol>
+    <li>Log in to your <b>MK Pay merchant panel</b>.</li>
+    <li>Open <b>Account &amp; API</b> — copy your <code>api_key</code> and <code>api_secret</code>.</li>
+    <li>Open the <b>Webhook</b> page and save your site's webhook URL. It is used for any invoice that does not carry its own <code>notify_url</code>.</li>
+    <li>Check <b>Plugins &amp; Modules</b> first — ready-made modules exist for popular platforms. Use the raw API below only for custom integrations.</li>
+  </ol>
+  <div class="box warn"><b>Keep your secret safe</b>The <code>api_secret</code> signs every request you send and every webhook you receive. Store it server-side only — never in browser JavaScript, mobile apps or public repositories. Requests can only be made while your merchant subscription is active; expired plans receive <code>403 subscription_required</code>.</div>
+</section>
+
+<!-- ═══════════════ AUTHENTICATION ═══════════════ -->
+<section id="authentication">
+  <h2>03 · Authentication</h2>
+  <p>Every request must carry four HTTP headers:</p>
+  <div class="tblwrap"><table class="tbl">
+    <tr><th>Header</th><th>Value</th></tr>
+    <tr><td><code>X-Merchant-Key</code></td><td>Your API key — identifies the merchant.</td></tr>
+    <tr><td><code>X-Timestamp</code></td><td>Current Unix time <b>in milliseconds</b> (e.g. <code>1792764428123</code>).</td></tr>
+    <tr><td><code>X-Nonce</code></td><td>A random unique string per request — e.g. 16 hex characters.</td></tr>
+    <tr><td><code>X-Signature</code></td><td>HMAC-SHA512 signature, computed as shown below.</td></tr>
+  </table></div>
+
+  <h3>Signature recipe</h3>
+  <div class="codewrap"><div class="codehead"><span>Signature scheme</span><button class="copy">Copy</button></div>
+<pre>string_to_sign  =  X-Timestamp  +  "\n"  +  X-Nonce  +  "\n"  +  raw_request_body
+
+X-Signature     =  lowercase_hex( HMAC_SHA512( key = api_secret,
+                                               message = string_to_sign ) )</pre></div>
+
+  <h3>Rules that prevent <code>bad_signature</code></h3>
+  <ul>
+    <li><b>Sign the exact bytes you send.</b> Build the JSON string once, sign it, and POST that same string. Re-encoding or re-ordering fields afterwards breaks the signature.</li>
+    <li>The timestamp must be within <b>±5 seconds</b> of the MK Pay server clock. Generate it immediately before sending and keep your server clock synced via NTP.</li>
+    <li>The nonce must be unique per request. Combined with the tight 5-second window, this blocks replay attempts.</li>
+    <li>All calls are <b>server-to-server</b> over HTTPS — never call the API from a browser.</li>
+  </ul>
+  <div class="codewrap"><div class="codehead"><span>PHP — computing the signature</span><button class="copy">Copy</button></div>
+<pre><span class="c">// $body = the exact JSON string you are about to POST</span>
+$ts  = (string) round(microtime(true) * 1000);   <span class="c">// milliseconds</span>
+$nc  = bin2hex(random_bytes(8));                 <span class="c">// random nonce</span>
+$sig = hash_hmac('sha512', $ts . "\n" . $nc . "\n" . $body, $SECRET);</pre></div>
+</section>
+
+<!-- ═══════════════ CREATE INVOICE ═══════════════ -->
+<section id="create-invoice">
+  <h2>04 · Create Invoice</h2>
+  <span class="ep" data-endpoint>POST https://pay.gsmsudan.com/api/v1/create.php</span>
+  <p>Creates a pending invoice and returns a checkout URL. Send the customer to <code>redirect</code> — everything else (amount display, method choice, payment detection) is handled by MK Pay.</p>
+
+  <h3>Request body (JSON)</h3>
+  <div class="tblwrap"><table class="tbl">
+    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+    <tr><td><code>user_id</code></td><td>string</td><td>Yes</td><td>Unique customer identifier on <b>your</b> site. Allowed characters: <code>A-Z a-z 0-9 _ - @ .</code> — anything else is stripped.</td></tr>
+    <tr><td><code>amount</code></td><td>number</td><td>Yes</td><td>Invoice amount in USDT, up to 2 decimals. Must be within the platform's allowed range, otherwise <code>bad_amount</code>.</td></tr>
+    <tr><td><code>gateway_id</code></td><td>integer</td><td>No</td><td>Force a specific gateway (must be one of your active gateways). Omit to let MK Pay choose automatically.</td></tr>
+    <tr><td><code>return_url</code></td><td>string (URL)</td><td>No</td><td>Where the customer is sent after completing the payment.</td></tr>
+    <tr><td><code>notify_url</code></td><td>string (URL)</td><td>No</td><td>Per-invoice webhook override. If omitted, the webhook URL saved on your panel's <b>Webhook</b> page is used.</td></tr>
+    <tr><td><code>reference</code></td><td>string</td><td>No</td><td>Your own order/reference ID. Allowed: <code>A-Z a-z 0-9 _ -</code>. Returned unchanged in the webhook.</td></tr>
+    <tr><td><code>customer_name</code></td><td>string</td><td>No</td><td>Customer display name (max 100 chars).</td></tr>
+    <tr><td><code>customer_email</code></td><td>string</td><td>No</td><td>Customer email (must be a valid email format).</td></tr>
+  </table></div>
+
+  <div class="box note"><b>Method selection — who picks the payment method?</b>
+  If <code>gateway_id</code> is provided, that gateway is used. If omitted and you have exactly one payable method (a BEP20 gateway, or Binance Pay with a QR configured), it is assigned automatically. If you have <b>more than one</b>, the invoice is created unassigned and the <b>customer chooses the method on the checkout page</b> — the choice then locks the invoice.</div>
+
+  <h3>Minimal request</h3>
+  <div class="codewrap"><div class="codehead"><span>Request body</span><button class="copy">Copy</button></div>
+<pre>{
+  "user_id": "1007",
+  "amount": 10.00
+}</pre></div>
+
+  <h3>Success response — HTTP 200</h3>
+  <div class="codewrap"><div class="codehead"><span>application/json</span><button class="copy">Copy</button></div>
+<pre>{
+  "status": "OK",
+  "transaction_id": "GP2610231145027F3A9C",
+  "note": "483920",
+  "redirect": "https://pay.gsmsudan.com/checkout.php?inv=9f3c8a41d2e74b06a5c1f8e3d2b4a6c8"
+}</pre></div>
+  <div class="tblwrap"><table class="tbl">
+    <tr><th>Field</th><th>Description</th></tr>
+    <tr><td><code>status</code></td><td><code>OK</code> — the invoice was created.</td></tr>
+    <tr><td><code>transaction_id</code></td><td>Unique invoice ID (<code>GP</code> + timestamp + random). <b>Store it</b> — it comes back in the webhook as <code>transaction_id</code>.</td></tr>
+    <tr><td><code>note</code></td><td>A 6-digit numeric note. Customers paying via <b>Binance Pay must include it as the "Note to Payee"</b>; it is the payment's identifier.</td></tr>
+    <tr><td><code>redirect</code></td><td>The checkout page URL. Redirect the customer there (HTTP 302 or a link/button).</td></tr>
+  </table></div>
+
+  <div class="box warn"><b>BEP20 amount tagging — never assume the exact paid amount</b>
+  For BEP20 invoices, MK Pay may add a unique fraction of up to <code>0.0999</code> USDT to the amount so the on-chain transfer can be matched automatically. The customer always pays the <b>exact amount displayed on the checkout page</b>. Your integration must therefore never hardcode or assume amounts — always read the credited amount from the webhook (<a href="#webhooks">section 06</a>).</div>
+</section>
+
+<!-- ═══════════════ ERRORS ═══════════════ -->
+<section id="errors">
+  <h2>05 · Errors</h2>
+  <p>All responses are JSON. Authentication and transport failures use proper HTTP status codes; two validation errors return HTTP 200 — so <b>always check the <code>error</code> / <code>status</code> field in the body</b>.</p>
+  <div class="tblwrap"><table class="tbl">
+    <tr><th>Error</th><th>HTTP</th><th>Meaning</th></tr>
+    <tr><td><code>missing_headers</code></td><td>401</td><td>One or more of the four authentication headers are missing.</td></tr>
+    <tr><td><code>expired_timestamp</code></td><td>401</td><td><code>X-Timestamp</code> differs from the MK Pay server clock by more than 5 seconds.</td></tr>
+    <tr><td><code>unknown_merchant</code></td><td>401</td><td>The API key is invalid or the merchant account is disabled.</td></tr>
+    <tr><td><code>bad_signature</code></td><td>401</td><td>The signature does not match — see the rules in section 03.</td></tr>
+    <tr><td><code>subscription_required</code></td><td>403</td><td>Your merchant plan has expired — renew it in the panel.</td></tr>
+    <tr><td><code>no_active_gateway</code></td><td>422</td><td>You have no active payment gateway. Add/activate one on the <b>Gateways</b> page.</td></tr>
+    <tr><td><code>rate_limited</code></td><td>429</td><td>More than 60 requests in 60 seconds — slow down and retry.</td></tr>
+    <tr><td><code>user_id_required</code></td><td>200 *</td><td><code>user_id</code> is missing or empty after sanitisation.</td></tr>
+    <tr><td><code>bad_amount</code></td><td>200 *</td><td><code>amount</code> is outside the platform's allowed range.</td></tr>
+  </table></div>
+  <p style="font-size:12.5px;color:#8A94BC">* Validation errors return HTTP 200 with an <code>error</code> field — inspect the response body, not just the status code.</p>
+
+  <div class="box bad"><b>Common causes of bad_signature</b>
+  Re-encoding the JSON after signing it · signing the pretty-printed body but sending a minified one · using the API key instead of the API secret · forgetting the two <code>\n</code> separators · millisecond vs second precision in <code>X-Timestamp</code>.</div>
+</section>
+
+<!-- ═══════════════ WEBHOOKS ═══════════════ -->
+<section id="webhooks">
+  <h2>06 · Webhooks</h2>
+  <p>The moment an invoice is confirmed, MK Pay POSTs a signed JSON payload to your webhook URL. This is how you know — with cryptographic certainty — that the payment really happened and was really confirmed by MK Pay.</p>
+
+  <h3>Which URL receives the webhook?</h3>
+  <ol>
+    <li>The <code>notify_url</code> sent when creating <b>that specific invoice</b> (per-invoice override) — used first if present.</li>
+    <li>Otherwise, the webhook URL saved on your panel's <b>Webhook</b> page.</li>
+  </ol>
+
+  <h3>Delivery facts</h3>
+  <div class="tblwrap"><table class="tbl">
+    <tr><th>Item</th><th>Value</th></tr>
+    <tr><td>Method</td><td><code>POST</code>, <code>Content-Type: application/json</code></td></tr>
+    <tr><td>Signature header</td><td><code>X-GW-Signature: lowercase_hex(HMAC_SHA512(raw_body, api_secret))</code></td></tr>
+    <tr><td>Timeout</td><td>10 seconds — reply fast, defer heavy work</td></tr>
+    <tr><td>Attempts</td><td>One attempt per confirmation — keep your endpoint reachable, and contact support to re-send if you missed one</td></tr>
+    <tr><td>Expected answer</td><td>HTTP <code>200</code> with the body <code>OK</code></td></tr>
+  </table></div>
+
+  <h3>Payload fields</h3>
+  <div class="tblwrap"><table class="tbl">
+    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+    <tr><td><code>transaction_id</code></td><td>string</td><td>The invoice ID — the same one returned by Create Invoice. Use it for idempotency.</td></tr>
+    <tr><td><code>note</code></td><td>string</td><td>The 6-digit payment note.</td></tr>
+    <tr><td><code>reference</code></td><td>string</td><td>Your reference, exactly as sent (<code>""</code> if none).</td></tr>
+    <tr><td><code>customer</code></td><td>string</td><td>The <code>user_id</code> you sent — credit <b>this</b> user.</td></tr>
+    <tr><td><code>customer_name</code></td><td>string</td><td>Customer name, as sent.</td></tr>
+    <tr><td><code>customer_email</code></td><td>string</td><td>Customer email, as sent.</td></tr>
+    <tr><td><code>amount</code></td><td>number</td><td><b>The credited amount — what actually arrived after network fees. Credit this value.</b></td></tr>
+    <tr><td><code>invoice_amount</code></td><td>number</td><td>The original invoice amount (informational only).</td></tr>
+    <tr><td><code>currency</code></td><td>string</td><td><code>USDT</code></td></tr>
+    <tr><td><code>status</code></td><td>string</td><td><code>PAID</code> — only process payloads with this status.</td></tr>
+    <tr><td><code>ts</code></td><td>number</td><td>Unix timestamp of the notification.</td></tr>
+  </table></div>
+
+  <div class="box ok"><b>Arrived-amount policy — read this before writing your receiver</b>
+  USDT network fees are deducted before the funds reach MK Pay, and MK Pay credits <b>what actually arrived</b>. That is why <code>amount</code> (credited) can be slightly lower than <code>invoice_amount</code>. Always credit <code>amount</code>. If your platform validates <code>amount == invoice total</code>, it will reject perfectly valid payments.</div>
+
+  <h3>Verifying the signature (PHP)</h3>
+  <div class="codewrap"><div class="codehead"><span>Signature check — always first</span><button class="copy">Copy</button></div>
+<pre><span class="c">// Compare in constant time; reject anything that does not match</span>
+$raw = file_get_contents('php://input');
+$sig = $_SERVER['HTTP_X_GW_SIGNATURE'] ?? '';
+
+if (!hash_equals(hash_hmac('sha512', $raw, $SECRET), $sig)) {
+    http_response_code(403);
+    echo 'invalid signature';
+    exit;
+}</pre></div>
+
+  <div class="box bad"><b>Never credit before verifying</b>
+  Anyone can POST a forged JSON payload to your webhook URL. Without the <code>X-GW-Signature</code> check above, an attacker credits themselves for free. Verify first, process second, answer <code>200 OK</code> last.</div>
+</section>
+
+<!-- ═══════════════ SECURITY ═══════════════ -->
+<section id="security">
+  <h2>07 · Security Best Practices</h2>
+  <ul>
+    <li><b>Server-to-server only.</b> The <code>api_secret</code> must never appear in browser JavaScript, mobile apps, or public repos — anyone holding it can create invoices and forge nothing less than your identity.</li>
+    <li><b>Verify every webhook signature</b> with a constant-time comparison (<code>hash_equals</code> in PHP) before doing anything else.</li>
+    <li><b>Idempotency:</b> keep a unique index on <code>transaction_id</code> and skip payloads you already processed — duplicates then become harmless.</li>
+    <li><b>Trust only <code>status: "PAID"</code>.</b> Ignore or log anything else.</li>
+    <li><b>Map before crediting:</b> use <code>reference</code> / <code>customer</code> to tie the payment to a real order on your side before adding balance.</li>
+    <li><b>Use HTTPS everywhere</b> — for <code>return_url</code>, <code>notify_url</code>, and your webhook endpoint.</li>
+    <li><b>Log every webhook</b> (raw body + your processing outcome). When something looks wrong, that log is the single source of truth.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════ EXAMPLES ═══════════════ -->
+<section id="examples">
+  <h2>08 · Full Integration Examples</h2>
+  <p>Two small PHP files are all it takes. Adapt the TODO sections to your platform.</p>
+
+  <h3>1 — Creating an invoice from your server</h3>
+  <div class="codewrap"><div class="codehead"><span>your-server.php — example</span><button class="copy">Copy</button></div>
+<pre>&lt;?php
+<span class="c">/* MK Pay — create an invoice (call this from your SERVER, never the browser) */</span>
+$API_URL = 'https://pay.gsmsudan.com/api/v1/create.php';
+$API_KEY = 'YOUR_API_KEY';
+$SECRET  = 'YOUR_API_SECRET';
+
+$payload = [
+    'user_id'        =&gt; '1007',                      <span class="c">// customer ID on YOUR site</span>
+    'amount'         =&gt; 10.00,                       <span class="c">// USDT, max 2 decimals</span>
+    'reference'      =&gt; 'ORDER-8891',                <span class="c">// optional: your order id</span>
+    'return_url'     =&gt; 'https://mysite.com/thanks.php',
+    'notify_url'     =&gt; 'https://mysite.com/mkpay-webhook.php',
+    'customer_name'  =&gt; 'Mohamed Ahmed',
+    'customer_email' =&gt; 'mohamed@example.com',
+];
+$body = json_encode($payload);                     <span class="c">// sign EXACTLY these bytes</span>
+
+$ts  = (string) round(microtime(true) * 1000);     <span class="c">// milliseconds</span>
+$nc  = bin2hex(random_bytes(8));                   <span class="c">// random nonce</span>
+$sig = hash_hmac('sha512', $ts . "\n" . $nc . "\n" . $body, $SECRET);
+
+$ch = curl_init($API_URL);
+curl_setopt_array($ch, [
+    CURLOPT_POST           =&gt; true,
+    CURLOPT_POSTFIELDS     =&gt; $body,
+    CURLOPT_RETURNTRANSFER =&gt; true,
+    CURLOPT_TIMEOUT        =&gt; 15,
+    CURLOPT_HTTPHEADER     =&gt; [
+        'Content-Type: application/json',
+        'X-Merchant-Key: ' . $API_KEY,
+        'X-Timestamp: '    . $ts,
+        'X-Nonce: '        . $nc,
+        'X-Signature: '    . $sig,
+    ],
+]);
+$res = json_decode((string) curl_exec($ch), true);
+
+if (($res['status'] ?? '') === 'OK') {
+    header('Location: ' . $res['redirect']);       <span class="c">// send customer to checkout</span>
+    exit;
+}
+http_response_code(400);
+exit('MK Pay error: ' . ($res['error'] ?? 'unknown'));</pre></div>
+
+  <h3>2 — Receiving the payment webhook</h3>
+  <div class="codewrap"><div class="codehead"><span>mkpay-webhook.php</span><button class="copy">Copy</button></div>
+<pre>&lt;?php
+<span class="c">/* MK Pay — webhook receiver. Verify first, process second, answer last. */</span>
+$SECRET = 'YOUR_API_SECRET';
+
+$raw = file_get_contents('php://input');
+$sig = $_SERVER['HTTP_X_GW_SIGNATURE'] ?? '';
+
+<span class="c">/* 1) Verify authenticity (constant-time compare) */</span>
+if (!hash_equals(hash_hmac('sha512', $raw, $SECRET), $sig)) {
+    http_response_code(403);
+    echo 'invalid signature';
+    exit;
+}
+
+<span class="c">/* 2) Parse the payload */</span>
+$d = json_decode($raw, true);
+
+<span class="c">/* 3) Process only confirmed payments, exactly once (idempotency) */</span>
+if (($d['status'] ?? '') === 'PAID') {
+    $txn  = $d['transaction_id'];      <span class="c">// e.g. GP2610231145027F3A9C — unique key</span>
+    $user = $d['customer'];            <span class="c">// the user_id you sent</span>
+    $amt  = (float) $d['amount'];      <span class="c">// CREDIT THIS (arrived amount)</span>
+
+    <span class="c">// TODO: skip if $txn was already processed</span>
+    <span class="c">// TODO: credit $amt to user $user on your platform</span>
+}
+
+<span class="c">/* 4) Always answer 2xx so MK Pay marks the delivery as accepted */</span>
+http_response_code(200);
+echo 'OK';</pre></div>
+
+  <div class="box note"><b>Wiring it up</b>
+  Upload <code>mkpay-webhook.php</code> to your site, then either send <code>notify_url</code> with every invoice, or save <code>https://yoursite.com/mkpay-webhook.php</code> once on the <b>Webhook</b> page of your MK Pay panel — every future invoice will use it automatically.</div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section id="faq">
+  <h2>09 · FAQ</h2>
+
+  <details><summary>Which amount should I credit my customer?</summary>
+  <p>Always <code>amount</code> — the amount that actually arrived after USDT network fees. <code>invoice_amount</code> is informational only. This is MK Pay's arrived-amount policy and it protects both sides from fee surprises.</p></details>
+
+  <details><summary>The checkout amount looks slightly different from what I requested — why?</summary>
+  <p>For BEP20 invoices MK Pay adds a unique fraction of up to 0.0999 USDT so the on-chain transfer can be matched automatically. The customer pays the exact amount shown on the checkout page, and the webhook tells you the final credited value.</p></details>
+
+  <details><summary>How long until the webhook arrives?</summary>
+  <p>Usually within a few minutes of the customer completing the transfer. BEP20 payments wait for the required network confirmations; Binance Pay transfers are detected via the 6-digit note. Detection runs continuously — no manual step.</p></details>
+
+  <details><summary>My site was down and missed the webhook — what now?</summary>
+  <p>Check the invoice status on the <b>Transactions</b> page of your MK Pay panel, then contact support with the <code>transaction_id</code> to have the notification re-sent. To stay safe in the future, design your receiver to answer <code>200 OK</code> within 10 seconds and defer heavy work.</p></details>
+
+  <details><summary>Why do I keep getting <code>expired_timestamp</code>?</summary>
+  <p>Your server clock drifts more than 5 seconds from MK Pay's clock. Enable NTP time synchronisation on your server and generate the timestamp immediately before each request.</p></details>
+
+  <details><summary>Can I call the API from the browser or a mobile app?</summary>
+  <p>No. The <code>api_secret</code> would be exposed and anyone could create invoices in your name. Always call the API from your server; the browser only ever sees the <code>redirect</code> URL.</p></details>
+
+  <details><summary>Does MK Pay retry failed webhook deliveries?</summary>
+  <p>Currently one attempt is made per confirmation. Keep your endpoint online and fast, monitor your logs, and contact support with the transaction ID if a delivery was missed.</p></details>
+</section>
+
+<p style="margin-top:30px;font-size:13px;color:#8A94BC">Need help with your integration? Contact MK Pay support through the channels provided with your merchant account — and always include the <code>transaction_id</code>.</p>
+
+</main>
+
+<footer>MK Pay Merchant API v1.0 · Last updated 23 October 2026 · pay.gsmsudan.com</footer>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   ✏️  EDIT THIS LINE ONLY — if your create-invoice endpoint path
+   differs, change it here once and every mention on the page
+   updates automatically.
+   ════════════════════════════════════════════════════════════════ */
+const MKPAY_ENDPOINT = 'https://pay.gsmsudan.com/api/v1/create.php';
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* inject the endpoint URL everywhere */
+  document.querySelectorAll('[data-endpoint]').forEach(el => el.textContent = 'POST ' + MKPAY_ENDPOINT);
+
+  /* copy buttons */
+  document.querySelectorAll('.codewrap').forEach(w => {
+    const b = w.querySelector('.copy'), p = w.querySelector('pre');
+    if (!b || !p) return;
+    b.addEventListener('click', () => {
+      const txt = p.innerText;
+      const done = () => { b.textContent = 'Copied ✓'; setTimeout(() => b.textContent = 'Copy', 1400); };
+      const fallback = () => {
+        const t = document.createElement('textarea');
+        t.value = txt; document.body.appendChild(t); t.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(t);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText)
+        navigator.clipboard.writeText(txt).then(done).catch(fallback);
+      else fallback();
+    });
+  });
+
+  /* highlight the active section in the sidebar */
+  const links = [...document.querySelectorAll('.sb nav a')];
+  const secs  = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('on'));
+        const i = secs.indexOf(e.target);
+        if (i > -1) links[i].classList.add('on');
+      }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px' });
+  secs.forEach(s => io.observe(s));
+});
+</script>
+</body>
+</html>
