@@ -209,9 +209,6 @@ confirmations. Plain HTTPS, JSON and HMAC signatures — no SDKs required.
 https://mkpay.win
 ```
 
-> The legacy domain `https://pay.gsmsudan.com` remains active and serves the same API with the
-> same keys — existing integrations keep working. New integrations should use `https://mkpay.win`.
-
 ### Credentials
 
 1. Log in to your **MK Pay merchant panel**.
