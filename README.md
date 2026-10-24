@@ -52,7 +52,7 @@ note, and the payment is detected automatically on the BSC chain and on Binance 
 The moment a payment is confirmed, MK Pay sends a signed JSON webhook to the merchant's
 notify URL so the customer can be credited automatically. Every request and every webhook
 is authenticated with HMAC-SHA512 signatures, so both sides can trust the data end to end.
-A merchant panel at [pay.gsmsudan.com](https://pay.gsmsudan.com) provides API credentials,
+A merchant panel at [mkpay.win](https://mkpay.win) provides API credentials,
 gateway management, the Transactions list, and a Webhook settings page.
 
 This repository contains the **official documentation** for the MK Pay Merchant API and
@@ -76,7 +76,7 @@ MK Pay on the checkout page.
 |---|---|
 | Currency | USDT only — BEP20 (BSC) and Binance Pay C2C |
 | API version | v1 |
-| Create-invoice endpoint | `POST https://pay.gsmsudan.com/api/v1/create.php` |
+| Create-invoice endpoint | `POST https://mkpay.win/api/v1/create.php` |
 | Request authentication | HMAC-SHA512 headers (see [Authentication](#authentication)) |
 | Webhook authentication | `X-GW-Signature` — HMAC-SHA512 of the raw body |
 | Rate limit (API) | 60 requests per minute per merchant |
@@ -88,7 +88,7 @@ MK Pay on the checkout page.
 To integrate a site with MK Pay you need the following, all of which come from your
 merchant account rather than from this repository:
 
-- A **merchant account** on [pay.gsmsudan.com](https://pay.gsmsudan.com) with an **active subscription** (expired plans receive `403 subscription_required`).
+- A **merchant account** on [mkpay.win](https://mkpay.win) with an **active subscription** (expired plans receive `403 subscription_required`).
 - Your **API Key** and **API Secret**, shown on the *Account & API* page of the panel.
 - At least one **active payment gateway** (a BEP20 gateway, or Binance Pay with a QR configured) on the *Gateways* page.
 - A server with **HTTPS** enabled — API calls are server-to-server only, and webhook URLs must be reachable by MK Pay.
@@ -98,10 +98,10 @@ merchant account rather than from this repository:
 
 | Your platform | Use this | Package |
 |---|---|---|
-| GSMTheme (Laravel script) | GSMTheme module | [gsmtheme-module.zip](https://pay.gsmsudan.com/modules/gsmtheme-module.zip) |
-| Dhru Fusion / Dhru Fusion Pro | Dhru module | [dhru-module.zip](https://pay.gsmsudan.com/modules/dhru-module.zip) |
-| WordPress + WooCommerce | WooCommerce plugin | [mkpay-woocommerce.zip](https://pay.gsmsudan.com/modules/mkpay-woocommerce.zip) |
-| Any custom PHP site / panel / tailor-made store | Universal PHP Kit | [mkpay-universal-php.zip](https://pay.gsmsudan.com/modules/mkpay-universal-php.zip) |
+| GSMTheme (Laravel script) | GSMTheme module | [gsmtheme-module.zip](https://mkpay.win/modules/gsmtheme-module.zip) |
+| Dhru Fusion / Dhru Fusion Pro | Dhru module | [dhru-module.zip](https://mkpay.win/modules/dhru-module.zip) |
+| WordPress + WooCommerce | WooCommerce plugin | [mkpay-woocommerce.zip](https://mkpay.win/modules/mkpay-woocommerce.zip) |
+| Any custom PHP site / panel / tailor-made store | Universal PHP Kit | [mkpay-universal-php.zip](https://mkpay.win/modules/mkpay-universal-php.zip) |
 | Anything else (Node, Python, …) | Direct HTTP API | this document |
 
 These four integrations — **GSMTheme, Dhru, WooCommerce and the Universal PHP Kit** —
@@ -115,7 +115,7 @@ when your platform cannot run one of the ready-made modules.
 
 A drop-in payment gateway class for websites running the GSMTheme script.
 
-1. Download [`gsmtheme-module.zip`](https://pay.gsmsudan.com/modules/gsmtheme-module.zip) and extract `MkPay.php`.
+1. Download [`gsmtheme-module.zip`](https://mkpay.win/modules/gsmtheme-module.zip) and extract `MkPay.php`.
 2. Upload it to your site at `app/Services/Gateway/MkPay.php` (via your File Manager).
    **The file name must be exactly `MkPay.php`** (capital M, capital P, lower-case k).
    Keep only ONE copy of this file in `app/Services/Gateway/` — if a differently-cased
@@ -123,7 +123,7 @@ A drop-in payment gateway class for websites running the GSMTheme script.
    gateway appears TWICE in the admin panel.
 3. Admin panel → **Payment Gateways** → add a new gateway.
 4. Gateway Class: `MkPay` — then fill in the gateway fields:
-   - **MK Pay URL** — `https://pay.gsmsudan.com` (no trailing slash)
+   - **MK Pay URL** — `https://mkpay.win` (no trailing slash)
    - **API Key** — from your MK Pay panel → *Account & API*
    - **API Secret** — from your MK Pay panel → *Account & API*
 5. Keep the module's `min_limit` / `max_limit` in sync with your MK Pay limits.
@@ -148,13 +148,13 @@ you never paste it anywhere in MK Pay.
 
 For websites running the Dhru Fusion / Dhru Fusion Pro script.
 
-1. Download [`dhru-module.zip`](https://pay.gsmsudan.com/modules/dhru-module.zip) and unzip it.
+1. Download [`dhru-module.zip`](https://mkpay.win/modules/dhru-module.zip) and unzip it.
 2. Upload `mkpay.php` (the one at the zip root) to `public_html/modules/gateways/`.
 3. Create the folder `public_html/modules/gateways/mkpay/`.
 4. Upload `mkpay/mkpay.php` and `mkpay/.htaccess` (from inside the zip) into that folder.
 5. Admin panel → **Payment Gateways** → activate **MK Pay — USDT BEP20** and fill in
    **Merchant API Key / Secret** (from MK Pay → *Account & API*). **MK Pay URL is
-   optional** — leave it empty to use `https://pay.gsmsudan.com`.
+   optional** — leave it empty to use `https://mkpay.win`.
 
 Same behavior as the GSMTheme module: the webhook is fully automatic, the signature
 (`X-GW-Signature`) is verified before crediting, and the customer is credited the
@@ -165,7 +165,7 @@ Same behavior as the GSMTheme module: the webhook is fully automatic, the signat
 For stores running WordPress + WooCommerce.
 
 1. WP admin → **Plugins** → Add New → **Upload Plugin** → pick
-   [`mkpay-woocommerce.zip`](https://pay.gsmsudan.com/modules/mkpay-woocommerce.zip) → Install → Activate.
+   [`mkpay-woocommerce.zip`](https://mkpay.win/modules/mkpay-woocommerce.zip) → Install → Activate.
 2. WooCommerce → **Settings** → **Payments** → **"MK Pay – USDT"** → enter your
    Merchant API Key & Secret → **Save**.
 3. Store currency is not USD? Set the **USDT rate** field — the invoice total sent to
@@ -180,7 +180,7 @@ For any website that accepts a custom payment gateway — custom PHP, panels, ta
 stores, anything.
 
 1. Extract the `mkpay` folder from
-   [`mkpay-universal-php.zip`](https://pay.gsmsudan.com/modules/mkpay-universal-php.zip)
+   [`mkpay-universal-php.zip`](https://mkpay.win/modules/mkpay-universal-php.zip)
    into your site, then run `install.sql` once (it creates the `payments` table).
 2. Edit `mkpay/mkpay-config.php` — enter your Merchant API Key & Secret and your orders
    table (ready-made examples for common schemas are inside the file).
@@ -206,8 +206,11 @@ confirmations. Plain HTTPS, JSON and HMAC signatures — no SDKs required.
 ### Base URL
 
 ```
-https://pay.gsmsudan.com
+https://mkpay.win
 ```
+
+> The legacy domain `https://pay.gsmsudan.com` remains active and serves the same API with the
+> same keys — existing integrations keep working. New integrations should use `https://mkpay.win`.
 
 ### Credentials
 
@@ -266,7 +269,7 @@ $sig = hash_hmac('sha512', $ts . "\n" . $nc . "\n" . $body, $SECRET);
 ### Create Invoice
 
 ```
-POST https://pay.gsmsudan.com/api/v1/create.php
+POST https://mkpay.win/api/v1/create.php
 Content-Type: application/json
 ```
 
@@ -308,7 +311,7 @@ checkout page** — the choice then locks the invoice.
   "status": "OK",
   "transaction_id": "GP2610231145027F3A9C",
   "note": "483920",
-  "redirect": "https://pay.gsmsudan.com/checkout.php?inv=9f3c8a41d2e74b06a5c1f8e3d2b4a6c8"
+  "redirect": "https://mkpay.win/checkout.php?inv=9f3c8a41d2e74b06a5c1f8e3d2b4a6c8"
 }
 ```
 
@@ -443,7 +446,7 @@ Two small PHP files are all it takes. Adapt the TODO sections to your platform.
 ```php
 <?php
 /* MK Pay — create an invoice (call this from your SERVER, never the browser) */
-$API_URL = 'https://pay.gsmsudan.com/api/v1/create.php';
+$API_URL = 'https://mkpay.win/api/v1/create.php';
 $API_KEY = 'YOUR_API_KEY';
 $SECRET  = 'YOUR_API_SECRET';
 
@@ -579,7 +582,7 @@ Need help with your integration? Contact MK Pay support through the channels pro
 with your merchant account — and always include the `transaction_id` so the payment can
 be located immediately.
 
-- Website: [pay.gsmsudan.com](https://pay.gsmsudan.com)
+- Website: [mkpay.win](https://mkpay.win)
 - Styled HTML version of this documentation: [api-docs.html](api-docs.html)
 
 ## License

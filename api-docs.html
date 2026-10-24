@@ -189,7 +189,7 @@ $sig = hash_hmac('sha512', $ts . "\n" . $nc . "\n" . $body, $SECRET);</pre></div
 <!-- ═══════════════ CREATE INVOICE ═══════════════ -->
 <section id="create-invoice">
   <h2>04 · Create Invoice</h2>
-  <span class="ep" data-endpoint>POST https://pay.gsmsudan.com/api/v1/create.php</span>
+  <span class="ep" data-endpoint>POST https://mkpay.win/api/v1/create.php</span>
   <p>Creates a pending invoice and returns a checkout URL. Send the customer to <code>redirect</code> — everything else (amount display, method choice, payment detection) is handled by MK Pay.</p>
 
   <h3>Request body (JSON)</h3>
@@ -221,7 +221,7 @@ $sig = hash_hmac('sha512', $ts . "\n" . $nc . "\n" . $body, $SECRET);</pre></div
   "status": "OK",
   "transaction_id": "GP2610231145027F3A9C",
   "note": "483920",
-  "redirect": "https://pay.gsmsudan.com/checkout.php?inv=9f3c8a41d2e74b06a5c1f8e3d2b4a6c8"
+  "redirect": "https://mkpay.win/checkout.php?inv=9f3c8a41d2e74b06a5c1f8e3d2b4a6c8"
 }</pre></div>
   <div class="tblwrap"><table class="tbl">
     <tr><th>Field</th><th>Description</th></tr>
@@ -336,7 +336,7 @@ if (!hash_equals(hash_hmac('sha512', $raw, $SECRET), $sig)) {
   <div class="codewrap"><div class="codehead"><span>your-server.php — example</span><button class="copy">Copy</button></div>
 <pre>&lt;?php
 <span class="c">/* MK Pay — create an invoice (call this from your SERVER, never the browser) */</span>
-$API_URL = 'https://pay.gsmsudan.com/api/v1/create.php';
+$API_URL = 'https://mkpay.win/api/v1/create.php';
 $API_KEY = 'YOUR_API_KEY';
 $SECRET  = 'YOUR_API_SECRET';
 
@@ -445,7 +445,7 @@ echo 'OK';</pre></div>
 
 </main>
 
-<footer>MK Pay Merchant API v1.0 · Last updated 23 October 2026 · pay.gsmsudan.com</footer>
+<footer>MK Pay Merchant API v1.0 · Last updated 23 October 2026 · mkpay.win</footer>
 
 <script>
 /* ════════════════════════════════════════════════════════════════
@@ -453,7 +453,7 @@ echo 'OK';</pre></div>
    differs, change it here once and every mention on the page
    updates automatically.
    ════════════════════════════════════════════════════════════════ */
-const MKPAY_ENDPOINT = 'https://pay.gsmsudan.com/api/v1/create.php';
+const MKPAY_ENDPOINT = 'https://mkpay.win/api/v1/create.php';
 
 document.addEventListener('DOMContentLoaded', () => {
 
